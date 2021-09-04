@@ -30,35 +30,28 @@ func _ready():
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
-		reachedTurning.append(true)
-		#turningPnts.append(node.position)
-		turningPnts.append([])
+		turningNo.append(0)
 
-var turningPnts =[]
-var reachedTurning = []
+var turningPnts = []
+var turningNo = []
 func moveCell(i,cell,delta):
-	#print(turningPnts[i])
 	if i==0:
 		cell.position += velocity* delta * movingDir
 	else:
-		
-		if not reachedTurning[i] and turningPnts[i].size() > 0 and cell.position.distance_to(turningPnts[i][0])>=velocity*delta:
-			var followDir:Vector2 = (turningPnts[i][0]-cellNodes[i].position).normalized()
-			#print(i,followDir)
-			cell.position += velocity* delta *followDir
+		var turnPntIdx = turningNo[i] - 1
+		if turningNo[i] > 0 :
+			if cell.position.distance_to(turningPnts[turnPntIdx])>1.2*velocity*delta:
+				var followDir:Vector2 = (turningPnts[turnPntIdx]-cellNodes[i].position).normalized()
+				cell.position += velocity* delta *followDir
+			else:
+				cell.position = turningPnts[turnPntIdx]
+				turningNo[i] -= 1
+				if i == (cellNodes.size() -1):
+					turningPnts.pop_back()
 		else:
-			if not reachedTurning[i]:
-				reachedTurning[i] = true
-				if turningPnts[i].size() > 0:
-					cell.position = turningPnts[i].pop_front()
-					
-					print("pop")
-					reachedTurning[i] = false
-				
-				pass
 			var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].texture.get_width()
-			var followDir:Vector2 = (followDest-cellNodes[i].position)
-			cell.position += velocity* delta * followDir.normalized()
+			var followDir:Vector2 = (followDest-cellNodes[i].position).normalized()
+			cell.position += velocity* delta * followDir
 		
 
 var bulletVelocity=2000.0
@@ -69,17 +62,16 @@ func moveShoot(i,bullet,delta):
 		shootNodes.remove(i)
 		shootDir.remove(i)
 		
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var head = 0
-var pending_turnpoint = []
-var ref_count = []
-func _process(delta):
-	if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right") or Input.is_action_pressed("move_down") or Input.is_action_pressed("move_up"):
+func _physics_process(delta):
+	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("move_down") or Input.is_action_just_pressed("move_up"):
+		turningPnts.push_front(cellNodes[0].position)
 		var i=0
 		for cell in cellNodes:
 			if i > 0:
-				turningPnts[i].append(cellNodes[0].position)
-				reachedTurning[i] = false
+				turningNo[i] += 1
 			i+=1
 		#print(pending_turnpoint)
 		#ref_count.append(cellNodes.size()-1)
@@ -98,6 +90,7 @@ func _process(delta):
 	for cell in cellNodes:
 		moveCell(i,cell,delta)
 		i+=1	
+		
 	if Input.is_action_just_released("shoot") and cellNodes.size()>1:
 		shootNodes.append(cellNodes[0])
 		shootDir.append(movingDir)

@@ -7,6 +7,6 @@
 shader = ExtResource( 2 )
 shader_param/color = Plane( 0.8, 0.5, 0.5, 1 )
 
-[node name="Sprite2" type="Sprite"]
+[node name="Sprite" type="Sprite"]
 material = SubResource( 1 )
 texture = ExtResource( 1 )
