@@ -7,6 +7,12 @@ var cellNodes = []
 # 1 = Red Cell
 # 2 = Green Cell
 # 3 = Blue Cell
+enum CELL_TYPE {
+	CELL_UNDEAD,
+	CELL_RED,
+	CELL_GREEN,
+	CELL_BLUE,
+}
 
 var velocity = 300.0
 var movingDir = Vector2(0,-1)
@@ -17,30 +23,38 @@ var shootDir = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var i=0
+	
 	for cell in cellList:
 		var node = cells[cell].instance()
-		node.position += i* node.texture.get_width() * - movingDir
+		node.position += i* node.texture.get_width() *( - movingDir)
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
 		reachedTurning.append(true)
-		turningPnts.append(node.position)
+		#turningPnts.append(node.position)
+		turningPnts.append([])
 
 var turningPnts =[]
 var reachedTurning = []
 func moveCell(i,cell,delta):
+	#print(turningPnts[i])
 	if i==0:
 		cell.position += velocity* delta * movingDir
 	else:
 		
-		if not reachedTurning[i] and cell.position.distance_to(turningPnts[i])>=velocity*delta:
-			var followDir:Vector2 = (turningPnts[i]-cellNodes[i].position).normalized()
+		if not reachedTurning[i] and turningPnts[i].size() > 0 and cell.position.distance_to(turningPnts[i][0])>=velocity*delta:
+			var followDir:Vector2 = (turningPnts[i][0]-cellNodes[i].position).normalized()
 			#print(i,followDir)
 			cell.position += velocity* delta *followDir
 		else:
 			if not reachedTurning[i]:
 				reachedTurning[i] = true
-				cell.position = turningPnts[i]
+				if turningPnts[i].size() > 0:
+					cell.position = turningPnts[i].pop_front()
+					
+					print("pop")
+					reachedTurning[i] = false
+				
 				pass
 			var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].texture.get_width()
 			var followDir:Vector2 = (followDest-cellNodes[i].position)
@@ -57,17 +71,19 @@ func moveShoot(i,bullet,delta):
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var head = 0
+var pending_turnpoint = []
+var ref_count = []
 func _process(delta):
-	
 	if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right") or Input.is_action_pressed("move_down") or Input.is_action_pressed("move_up"):
-		for i in range(cellNodes.size()):
-			if i>0:
-				var r = cellNodes.size()-i
-			#	print(r)
-				turningPnts[r]=cellNodes[0].position
-			else:
-				turningPnts[0]=cellNodes[0].position
-			reachedTurning[i]=false
+		var i=0
+		for cell in cellNodes:
+			if i > 0:
+				turningPnts[i].append(cellNodes[0].position)
+				reachedTurning[i] = false
+			i+=1
+		#print(pending_turnpoint)
+		#ref_count.append(cellNodes.size()-1)
+		
 	
 	if Input.is_action_pressed("move_left"):
 		movingDir = Vector2(-1,0)
