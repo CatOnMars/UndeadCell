@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://cellTiles.tres" type="TileSet" id=1]
+[ext_resource path="res://Level1.gd" type="Script" id=2]
 
 [node name="Level" type="TileMap"]
 tile_set = ExtResource( 1 )
+show_collision = true
 format = 1
-tile_data = PoolIntArray( 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 196608, 0, 0, 196609, 0, 0 )
+tile_data = PoolIntArray( 2, 3, 0, 5, 3, 0, 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 196608, 0, 0, 196609, 0, 0, 196612, 3, 0 )
+script = ExtResource( 2 )

@@ -8,10 +8,10 @@ var cellNodes = []
 # 2 = Green Cell
 # 3 = Blue Cell
 enum CELL_TYPE {
-	CELL_UNDEAD,
-	CELL_RED,
-	CELL_GREEN,
-	CELL_BLUE,
+	UNDEAD,
+	RED,
+	GREEN,
+	BLUE,
 }
 
 var velocity = 300.0
@@ -26,7 +26,7 @@ func _ready():
 	
 	for cell in cellList:
 		var node = cells[cell].instance()
-		node.position += i* node.texture.get_width() *( - movingDir)
+		node.position += i* node.get_node("Sprite").texture.get_width() *( - movingDir)
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
@@ -49,15 +49,27 @@ func moveCell(i,cell,delta):
 				if i == (cellNodes.size() -1):
 					turningPnts.pop_back()
 		else:
-			var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].texture.get_width()
+			var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].get_node("Sprite").texture.get_width()
 			var followDir:Vector2 = (followDest-cellNodes[i].position).normalized()
 			cell.position += velocity* delta * followDir
 		
 
 var bulletVelocity=2000.0
 func moveShoot(i,bullet,delta):
-	bullet.position+= bulletVelocity*shootDir[i]*delta
-	if bullet.position.distance_to(cellNodes[0].position)>=3000.0:
+	#bullet.position+= bulletVelocity*shootDir[i]*delta
+	# if bullet collide with cell tilemap,
+	# add it to tilemap and destroy it
+	var collision = bullet.move_and_collide(bulletVelocity*shootDir[i]*delta)
+	if collision:
+		if collision.collider is TileMap:
+			var tilemap : TileMap = collision.collider
+			
+			var centerOffset = Vector2(shootNodes[i].get_node("Sprite").texture.get_width(), shootNodes[i].get_node("Sprite").texture.get_height()) / 2
+			tilemap.add_new_cell(shootNodes[i].position, shootNodes[i].cell_type)
+		shootNodes[i].queue_free()
+		shootNodes.remove(i)
+		shootDir.remove(i)
+	elif bullet.position.distance_to(cellNodes[0].position)>=3000.0:
 		shootNodes[i].queue_free()
 		shootNodes.remove(i)
 		shootDir.remove(i)
