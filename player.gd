@@ -66,6 +66,8 @@ func moveShoot(i,bullet,delta):
 			
 			var centerOffset = Vector2(shootNodes[i].get_node("Sprite").texture.get_width(), shootNodes[i].get_node("Sprite").texture.get_height()) / 2
 			tilemap.add_new_cell(shootNodes[i].position, shootNodes[i].cell_type)
+			# check elimination is viable or not
+			tilemap.eliminate()
 		shootNodes[i].queue_free()
 		shootNodes.remove(i)
 		shootDir.remove(i)
