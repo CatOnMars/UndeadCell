@@ -25,6 +25,33 @@ func eliminate():
 	for coord in eList:
 		set_cellv(coord, -1)
 	pass
+	fall()
+	
+var BOUND_Y = 3
+class YCoordSorter:
+	static func sort_descending(a, b):
+		if a[1] > b[1]:
+			return true
+		return false
+func fall():
+	var cell_coords = get_used_cells()
+	cell_coords.sort_custom(YCoordSorter, 'sort_descending')
+	print(cell_coords)
+	var moveDownList = []
+	for coord in cell_coords:
+		if coord.y >= BOUND_Y:
+			continue
+		var newCoord = coord
+		while  get_cellv(newCoord+Vector2(0, 1) ) == -1 and (newCoord+Vector2(0, 1) ).y <= BOUND_Y:
+			newCoord += Vector2(0, 1)
+			continue
+		moveDownList.append([coord, newCoord])
+	for coordPair in moveDownList:
+		var coord =coordPair[0]
+		var newCoord =coordPair[1]
+		var cellType = get_cellv(coord)
+		set_cellv(coord, -1)
+		set_cellv(newCoord, cellType)
 func dfs(origin):
 	var targetCell = get_cellv(origin)
 	if targetCell == -1:
