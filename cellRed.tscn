@@ -8,8 +8,8 @@
 shader = ExtResource( 2 )
 shader_param/color = Plane( 0.8, 0.5, 0.5, 1 )
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 34.5, 31.2403 )
+[sub_resource type="CircleShape2D" id=2]
+radius = 17.2978
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
 script = ExtResource( 3 )

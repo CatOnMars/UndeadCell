@@ -12,10 +12,12 @@ func _ready():
 
 func test(position):
 	print(world_to_map(position))
+	
 func add_new_cell(position, type):
 	var cellCoord = world_to_map(to_local(position))
 	print(cellCoord) 
 	set_cellv(cellCoord, type)
+	
 func eliminate():
 	# DFS all activated cells
 	var cell_coords = get_used_cells()

@@ -151,5 +151,8 @@ func _physics_process(delta):
 		head%=cellNodes.size()
 		if head == 0:
 			head = 1
+		var level:TileMap = get_node("../Level")
+		print(level.world_to_map(Vector2(0,-1)))
+		print(level.world_to_map(Vector2(0,128)))
 	headPosition = cellNodes[0].global_position
 	pass
