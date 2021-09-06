@@ -36,23 +36,20 @@ func _ready():
 var turningPnts = []
 var turningNo = []
 func moveCell(i,cell,delta):
-	if i==0:
-		cell.position += velocity* delta * movingDir
-	else:
-		var turnPntIdx = turningNo[i] - 1
-		if turningNo[i] > 0 :
-			if cell.position.distance_to(turningPnts[turnPntIdx])>1.2*velocity*delta:
-				var followDir:Vector2 = (turningPnts[turnPntIdx]-cellNodes[i].position).normalized()
-				cell.position += velocity* delta *followDir
-			else:
-				cell.position = turningPnts[turnPntIdx]
-				turningNo[i] -= 1
-				if i == (cellNodes.size() -1):
-					turningPnts.pop_back()
+	var turnPntIdx = turningNo[i] - 1
+	if turningNo[i] > 0 :
+		if cell.position.distance_to(turningPnts[turnPntIdx])>1.2*velocity*delta:
+			var followDir:Vector2 = (turningPnts[turnPntIdx]-cellNodes[i].position).normalized()
+			cell.position += velocity* delta *followDir
 		else:
-			var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].get_node("Sprite").texture.get_width()
-			var followDir:Vector2 = (followDest-cellNodes[i].position).normalized()
-			cell.position += velocity* delta * followDir
+			cell.position = turningPnts[turnPntIdx]
+			turningNo[i] -= 1
+			if i == (cellNodes.size() -1):
+				turningPnts.pop_back()
+	else:
+		var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].get_node("Sprite").texture.get_width()
+		var followDir:Vector2 = (followDest-cellNodes[i].position).normalized()
+		cell.position += velocity* delta * followDir
 		
 
 var bulletVelocity=2000.0
@@ -105,10 +102,10 @@ func _physics_process(delta):
 	elif Input.is_action_pressed("move_down"):
 		movingDir = Vector2(0, 1)
 	
-	var i=0
-	for cell in cellNodes:
-		moveCell(i,cell,delta)
-		i+=1	
+	var collision = cellNodes[0].move_and_collide(velocity* delta * movingDir)
+	if not collision:
+		for idx in range(1,cellNodes.size()):
+			moveCell(idx,cellNodes[idx],delta)	
 		
 	if Input.is_action_just_released("shoot") and cellNodes.size()>1:
 		shootNodes.append(cellNodes[1])
@@ -119,7 +116,7 @@ func _physics_process(delta):
 		cellNodes.remove(1)
 		head=1
 		
-	i=0		
+	var i=0		
 	for bullet in shootNodes:
 		moveShoot(i,bullet,delta)
 		i+=1
