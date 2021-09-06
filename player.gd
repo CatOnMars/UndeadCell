@@ -83,7 +83,7 @@ func moveShoot(i,bullet,delta):
 		
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-var head = 0
+var head = 1
 func _physics_process(delta):
 	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("move_down") or Input.is_action_just_pressed("move_up"):
 		turningPnts.push_front(cellNodes[0].position)
@@ -111,18 +111,23 @@ func _physics_process(delta):
 		i+=1	
 		
 	if Input.is_action_just_released("shoot") and cellNodes.size()>1:
-		shootNodes.append(cellNodes[0])
+		shootNodes.append(cellNodes[1])
 		shootDir.append(movingDir)
-		cellNodes.remove(0)
-		head=0
+		for idx in range(2,cellNodes.size()):
+			cellNodes[idx].position=cellNodes[idx-1].position
+		cellNodes[1].position = cellNodes[0].position+velocity*delta*movingDir
+		cellNodes.remove(1)
+		head=1
 		
 	i=0		
 	for bullet in shootNodes:
 		moveShoot(i,bullet,delta)
 		i+=1
 	
-	if Input.is_action_just_released("swap") and cellNodes.size() >= 2:
+	if Input.is_action_just_released("swap") and cellNodes.size() > 2:
 		var toSwap = (head +1)%cellNodes.size()
+		if toSwap == 0:
+			toSwap = 1
 		var tmp = cellNodes[head]
 		var tmpPos = cellNodes[toSwap].position
 		cellNodes[head]=cellNodes[toSwap]
@@ -131,5 +136,7 @@ func _physics_process(delta):
 		cellNodes[toSwap].position = tmpPos
 		head+=1
 		head%=cellNodes.size()
+		if head == 0:
+			head = 1
 	headPosition = cellNodes[0].global_position
 	pass
