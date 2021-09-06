@@ -66,7 +66,11 @@ func moveShoot(i,bullet,delta):
 			var tilemap : TileMap = collision.collider
 			
 			var centerOffset = Vector2(shootNodes[i].get_node("Sprite").texture.get_width(), shootNodes[i].get_node("Sprite").texture.get_height()) / 2
-			tilemap.add_new_cell(shootNodes[i].position, shootNodes[i].cell_type)
+			#x=  get_parent().get_node("Camera2D").to_global(shootNodes[i].position)
+			var player_global_position
+			player_global_position =  to_global(shootNodes[i].position)
+			tilemap.add_new_cell(player_global_position, shootNodes[i].cell_type)
+			
 			# check elimination is viable or not
 			tilemap.eliminate()
 		shootNodes[i].queue_free()
