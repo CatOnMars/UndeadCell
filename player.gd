@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 export var headPosition:Vector2
-var cellList = [0,1,2,3,2,1,3]
+var cellList = [0,1,2,3]
 var cellNodes = []
 
 # 0 = Undead Cell
