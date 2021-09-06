@@ -1,5 +1,6 @@
 extends RigidBody2D
 
+export var headPosition:Vector2
 var cellList = [0,1,2,3,2,1,3]
 var cellNodes = []
 
@@ -126,4 +127,5 @@ func _physics_process(delta):
 		cellNodes[toSwap].position = tmpPos
 		head+=1
 		head%=cellNodes.size()
+	headPosition = cellNodes[0].global_position
 	pass
