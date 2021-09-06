@@ -121,7 +121,7 @@ func _physics_process(delta):
 		moveShoot(i,bullet,delta)
 		i+=1
 	
-	if Input.is_action_just_released("swap") and cellNodes.size()>2:
+	if Input.is_action_just_released("swap") and cellNodes.size() >= 2:
 		var toSwap = (head +1)%cellNodes.size()
 		var tmp = cellNodes[head]
 		var tmpPos = cellNodes[toSwap].position
