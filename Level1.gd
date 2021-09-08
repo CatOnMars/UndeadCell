@@ -17,6 +17,19 @@ func add_new_cell(position, type):
 	var cellCoord = world_to_map(to_local(position))
 	print(cellCoord) 
 	set_cellv(cellCoord, type)
+
+func fadeOut(coord,duration):
+	var mat=tile_set.tile_get_material(get_cellv(coord))
+	mat.set_shader_param("r",0.4)
+	var alpha=duration
+	while duration>0:
+		yield(get_tree(),"idle_frame")
+		duration-=get_process_delta_time()
+		mat.set_shader_param("r",duration/alpha)
+	set_cellv(coord, -1)
+	mat.set_shader_param("r",0.4)
+	pass
+	
 	
 func eliminate():
 	# DFS all activated cells
@@ -25,7 +38,8 @@ func eliminate():
 	for coord in cell_coords:
 		eList.append_array(dfs(coord))
 	for coord in eList:
-		set_cellv(coord, -1)
+		if (get_cellv(coord)!=-1):
+			fadeOut(coord,0.3)
 	pass
 	#fall()
 	
