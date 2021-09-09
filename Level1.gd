@@ -5,10 +5,20 @@ extends TileMap
 # var a = 2
 # var b = "text"
 
-
+var cells:Dictionary = { "undead": preload("res://cellUndead.tscn"),
+"red":preload("res://cellRed.tscn"), "green": preload("res://cellGreen.tscn"),
+"blue": preload("res://cellBlue.tscn")}
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	var cell_coords = get_used_cells()
+	for coord in cell_coords:
+		var cell_type = get_cellv(coord)
+		var cell_name = tile_set.tile_get_name(cell_type)
+		if cell_name in cells:
+			var cell_inst = cells[cell_name].instance()
+			cell_inst.position = map_to_world(coord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
+			add_child(cell_inst)
+	pass
 
 func test(position):
 	print(world_to_map(position))
