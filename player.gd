@@ -67,17 +67,23 @@ func moveShoot(i,bullet,delta):
 	# add it to tilemap and destroy it
 	var collision = bullet.move_and_collide(bulletVelocity*shootDir[i]*delta)
 	if collision:
-		if collision.collider is TileMap:
-			var tilemap : TileMap = collision.collider
-			
-			var centerOffset = Vector2(shootNodes[i].get_node("Sprite").texture.get_width(), shootNodes[i].get_node("Sprite").texture.get_height()) / 2
+		#if collision.collider is TileMap:
+		#	var tilemap : TileMap = collision.collider
+		var tilemap : TileMap = get_node("../Cells")	
+		var centerOffset = Vector2(shootNodes[i].get_node("Sprite").texture.get_width(), shootNodes[i].get_node("Sprite").texture.get_height()) / 2
 			#x=  get_parent().get_node("Camera2D").to_global(shootNodes[i].position)
-			var player_global_position
-			player_global_position =  to_global(shootNodes[i].position)
-			tilemap.add_new_cell(player_global_position, shootNodes[i].cell_type)
+		var collision_pnt = collision.position
+		var hit_pnt = tilemap.world_to_map(collision_pnt)
+		if tilemap.get_cellv(hit_pnt):
+			tilemap.add_new_cell(hit_pnt-shootDir[i],shootNodes[i].cell_type)
+		else:
+			var player_global_position =  to_global(shootNodes[i].position)
+			var cell_coord = tilemap.world_to_map(player_global_position)
+			tilemap.add_new_cell(cell_coord, shootNodes[i].cell_type)
 			
 			# check elimination is viable or not
-			tilemap.eliminate()
+		tilemap.eliminate()
+		
 		shootNodes[i].queue_free()
 		shootNodes.remove(i)
 		shootDir.remove(i)

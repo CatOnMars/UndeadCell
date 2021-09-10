@@ -9,6 +9,7 @@ var cells:Dictionary = { "undead": preload("res://cellUndead.tscn"),
 "red":preload("res://cellRed.tscn"), "green": preload("res://cellGreen.tscn"),
 "blue": preload("res://cellBlue.tscn")}
 # Called when the node enters the scene tree for the first time.
+var cellsPresent:Dictionary = {}
 func _ready():
 	var cell_coords = get_used_cells()
 	for coord in cell_coords:
@@ -18,18 +19,24 @@ func _ready():
 			var cell_inst = cells[cell_name].instance()
 			cell_inst.position = map_to_world(coord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
 			add_child(cell_inst)
+			cellsPresent[coord] = cell_inst
 	pass
 
 func test(position):
 	print(world_to_map(position))
 	
-func add_new_cell(position, type):
-	var cellCoord = world_to_map(to_local(position))
+func add_new_cell(cellCoord, type):
 	print(cellCoord) 
 	set_cellv(cellCoord, type)
+	var cell_name = tile_set.tile_get_name(type)
+	var cell_inst = cells[cell_name].instance()
+	cell_inst.position = map_to_world(cellCoord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
+	add_child(cell_inst)
+	cellsPresent[cellCoord] = cell_inst
 
 func fadeOut(coord,duration):
-	var mat=tile_set.tile_get_material(get_cellv(coord))
+	print("fadeOut",coord)
+	var mat=cellsPresent[coord].get_node("Sprite").get_material()
 	mat.set_shader_param("r",0.4)
 	var alpha=duration
 	while duration>0:
@@ -37,16 +44,19 @@ func fadeOut(coord,duration):
 		duration-=get_process_delta_time()
 		mat.set_shader_param("r",duration/alpha)
 	set_cellv(coord, -1)
-	mat.set_shader_param("r",0.4)
+	cellsPresent[coord].queue_free()
+	cellsPresent.erase(coord)
+	#mat.set_shader_param("r",0.4)
 	pass
 	
 	
 func eliminate():
 	# DFS all activated cells
 	var cell_coords = get_used_cells()
-	var eList = []
+	var eList = {}
 	for coord in cell_coords:
-		eList.append_array(dfs(coord))
+		for cord in dfs(coord):
+			eList[cord] = cord
 	for coord in eList:
 		if (get_cellv(coord)!=-1):
 			fadeOut(coord,0.3)
@@ -78,6 +88,7 @@ func fall():
 		var cellType = get_cellv(coord)
 		set_cellv(coord, -1)
 		set_cellv(newCoord, cellType)
+		
 func dfs(origin):
 	
 	var targetCell = get_cellv(origin)

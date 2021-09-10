@@ -4,18 +4,22 @@
 [ext_resource path="res://cell.shader" type="Shader" id=2]
 [ext_resource path="res://cellRed.gd" type="Script" id=3]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
 shader = ExtResource( 2 )
 shader_param/color = Plane( 0.8, 0.5, 0.5, 1 )
+shader_param/r = 0.4
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 17.2978
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 1 )
+material = SubResource( 3 )
 texture = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
