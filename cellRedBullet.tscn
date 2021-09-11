@@ -14,8 +14,8 @@ shader_param/r = 0.4
 radius = 17.2978
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 2
+collision_mask = 5
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]

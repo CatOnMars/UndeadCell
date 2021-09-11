@@ -17,8 +17,8 @@ enum CELL_TYPE {
 
 var velocity = 300.0
 var movingDir = Vector2(0,-1)
+var cellsBullets = [ preload("res://cellUndeadBullet.tscn"),preload("res://cellRedBullet.tscn"),preload("res://cellGreenBullet.tscn"),preload("res://cellBlueBullet.tscn")]
 var cells = [ preload("res://cellUndead.tscn"),preload("res://cellRed.tscn"),preload("res://cellGreen.tscn"),preload("res://cellBlue.tscn")]
-
 var shootNodes = []
 var shootDir = []
 # Called when the node enters the scene tree for the first time.
@@ -26,8 +26,9 @@ func _ready():
 	var i=0
 	
 	for cell in cellList:
-		var node = cells[cell].instance()
+		var node = cellsBullets[cell].instance()
 		node.position += i* node.get_node("Sprite").texture.get_width() *( - movingDir)
+		node.get_node("CollisionShape2D").hide()
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
