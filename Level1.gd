@@ -4,7 +4,7 @@ extends TileMap
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+signal eliminate_again(coord)
 var cells:Dictionary = { "undead": preload("res://cellUndead.tscn"),
 "red":preload("res://cellRed.tscn"), "green": preload("res://cellGreen.tscn"),
 "blue": preload("res://cellBlue.tscn")}
@@ -20,6 +20,7 @@ func _ready():
 			cell_inst.position = map_to_world(coord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
 			add_child(cell_inst)
 			cellsPresent[coord] = cell_inst
+	connect("eliminate_again", self, "eliminate")
 	pass
 
 func test(position):
@@ -78,6 +79,8 @@ func eliminate(cell_coord:Vector2):
 		if (get_cellv(coord)!=-1):
 			fadeOut(coord,0.3)
 	#fall()
+	if len(eList) > 0:
+		fall(cell_coord, 0.6)
 	
 
 class YCoordSorter:
@@ -118,7 +121,8 @@ func fall(cell_coord:Vector2, duration):
 		cellsPresent.erase(coord)
 		set_cellv(coord, -1)
 		set_cellv(newCoord, cell_inst.cell_type)
-		
+	if len(moveDownList) > 0:
+		emit_signal("eliminate_again", cell_coord)
 		
 func dfs(origin):
 	

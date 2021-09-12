@@ -80,14 +80,14 @@ func moveShoot(i,bullet,delta):
 			tilemap.add_new_cell(hit_pnt-shootDir[i],shootNodes[i].cell_type)
 			# check elimination is viable or not
 			tilemap.eliminate(hit_pnt-shootDir[i])
-			tilemap.fall(hit_pnt-shootDir[i], 0.6)
+			#tilemap.fall(hit_pnt-shootDir[i], 0.6)
 		else:
 			var player_global_position =  to_global(shootNodes[i].position)
 			var cell_coord = tilemap.world_to_map(player_global_position)
 			tilemap.add_new_cell(cell_coord, shootNodes[i].cell_type)
 			# check elimination is viable or not
 			tilemap.eliminate(cell_coord)
-			tilemap.fall(cell_coord, 0.6)
+			#tilemap.fall(cell_coord, 0.6)
 		
 		
 		shootNodes[i].queue_free()
