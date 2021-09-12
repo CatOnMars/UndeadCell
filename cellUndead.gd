@@ -10,7 +10,11 @@ var cell_type = Global.CELL_TYPE.UNDEAD
 func _ready():
 	pass # Replace with function body.
 
-
+var fallingEnabled = true
+func enableFalling(on=true):
+	fallingEnabled = on
+func getFallingEnabled():
+	return fallingEnabled
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

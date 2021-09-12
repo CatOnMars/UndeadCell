@@ -29,6 +29,7 @@ func _ready():
 		var node = cellsBullets[cell].instance()
 		node.position += i* node.get_node("Sprite").texture.get_width() *( - movingDir)
 		node.get_node("CollisionShape2D").hide()
+		node.enableFalling(false)
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
@@ -77,13 +78,17 @@ func moveShoot(i,bullet,delta):
 		var hit_pnt = tilemap.world_to_map(collision_pnt)
 		if tilemap.get_cellv(hit_pnt):
 			tilemap.add_new_cell(hit_pnt-shootDir[i],shootNodes[i].cell_type)
+			# check elimination is viable or not
+			tilemap.eliminate(hit_pnt-shootDir[i])
+			tilemap.fall(hit_pnt-shootDir[i], 0.6)
 		else:
 			var player_global_position =  to_global(shootNodes[i].position)
 			var cell_coord = tilemap.world_to_map(player_global_position)
 			tilemap.add_new_cell(cell_coord, shootNodes[i].cell_type)
-			
 			# check elimination is viable or not
-		tilemap.eliminate()
+			tilemap.eliminate(cell_coord)
+			tilemap.fall(cell_coord, 0.6)
+		
 		
 		shootNodes[i].queue_free()
 		shootNodes.remove(i)
