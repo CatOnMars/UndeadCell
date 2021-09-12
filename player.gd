@@ -29,7 +29,7 @@ func _ready():
 		var node = cellsBullets[cell].instance()
 		node.position += i* node.get_node("Sprite").texture.get_width() *( - movingDir)
 		node.get_node("CollisionShape2D").hide()
-		node.enableFalling(false)
+		
 		i+=1
 		add_child(node)
 		cellNodes.append(node)
