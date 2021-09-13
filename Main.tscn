@@ -27,27 +27,9 @@ hdr = false
 usage = 0
 render_target_update_mode = 3
 
-[node name="Player" parent="ViewportContainer/Viewport" instance=ExtResource( 1 )]
-position = Vector2( -2593.58, 3496.36 )
-collision_layer = 2
-collision_mask = 2
-
-[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Viewport"]
-current = true
-script = ExtResource( 4 )
-
-[node name="RigidBody2D2" type="RigidBody2D" parent="ViewportContainer/Viewport"]
-position = Vector2( -76.1093, 79.0823 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ViewportContainer/Viewport/RigidBody2D2"]
-shape = SubResource( 1 )
-
-[node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport/RigidBody2D2"]
-texture = ExtResource( 3 )
-
 [node name="Cells" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
 centered_textures = true
-tile_data = PoolIntArray( 2, 3, 0, 5, 3, 0, 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 131077, 12, 0, 524247, 2, 0, 589783, 2, 0, 655317, 2, 0, 655318, 2, 0, 655320, 2, 0, 655321, 2, 0, 1245143, 3, 0, 1310677, 3, 0, 1310678, 3, 0, 1310680, 3, 0, 1310681, 3, 0, 2031575, 1, 0, 2097110, 1, 0, 2097112, 1, 0, 2359241, 1, 0, 2359242, 1, 0, 2359264, 1, 0, 2359265, 1, 0, 2424778, 1, 0, 2424800, 1, 0, 2555859, 1, 0, 2555860, 1, 0, 2555862, 1, 0, 2686936, 3, 0, 2752472, 2, 0, 2818008, 2, 0, 2818009, 3, 0, 2883544, 1, 0, 2883545, 1, 0, 2883546, 3, 0, 2949078, 1, 0, 2949079, 1, 0, 2949080, 2, 0, 2949081, 2, 0, 2949082, 3, 0 )
+tile_data = PoolIntArray( 2, 3, 0, 5, 3, 0, 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 131077, 12, 0, 524247, 2, 0, 589783, 2, 0, 655317, 2, 0, 655318, 2, 0, 655320, 2, 0, 655321, 2, 0, 1245143, 3, 0, 1310677, 3, 0, 1310678, 3, 0, 1310680, 3, 0, 1310681, 3, 0, 2031575, 1, 0, 2097110, 1, 0, 2097112, 1, 0, 2359241, 1, 0, 2359242, 1, 0, 2359264, 1, 0, 2359265, 1, 0, 2424778, 1, 0, 2424800, 1, 0, 2555859, 1, 0, 2555860, 1, 0, 2555862, 1, 0, 2686936, 3, 0, 2752471, 1, 0, 2752472, 2, 0, 2752473, 2, 0, 2818006, 2, 0, 2818007, 1, 0, 2818008, 2, 0, 2818009, 3, 0, 2883542, 3, 0, 2883543, 3, 0, 2883544, 1, 0, 2883545, 1, 0, 2883546, 3, 0, 2949078, 1, 0, 2949079, 1, 0, 2949080, 2, 0, 2949081, 3, 0, 2949082, 3, 0, 2949083, 1, 0 )
 
 [node name="Area1" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
 visible = false
@@ -71,8 +53,26 @@ script = ExtResource( 5 )
 visible = false
 position = Vector2( -2683, 2622.26 )
 scale = Vector2( 0.984371, 0.97276 )
-polygon = PoolVector2Array( -5, -64, 328.127, -64, 328.127, 273.185, -5.08057, 273.185 )
+polygon = PoolVector2Array( -195.416, -66.5413, 539.932, -66.5413, 533.482, 279.411, -201.866, 276.147 )
 script = ExtResource( 5 )
+
+[node name="Player" parent="ViewportContainer/Viewport" instance=ExtResource( 1 )]
+position = Vector2( -2593.58, 3496.36 )
+collision_layer = 2
+collision_mask = 2
+
+[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Viewport"]
+current = true
+script = ExtResource( 4 )
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="ViewportContainer/Viewport"]
+position = Vector2( -76.1093, 79.0823 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ViewportContainer/Viewport/RigidBody2D2"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport/RigidBody2D2"]
+texture = ExtResource( 3 )
 
 [node name="Level" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
 centered_textures = true
