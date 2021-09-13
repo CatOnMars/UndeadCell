@@ -53,7 +53,7 @@ script = ExtResource( 5 )
 visible = false
 position = Vector2( -2683, 2622.26 )
 scale = Vector2( 0.984371, 0.97276 )
-polygon = PoolVector2Array( -195.416, -66.5413, 539.932, -66.5413, 533.482, 279.411, -201.866, 276.147 )
+polygon = PoolVector2Array( -200.128, -64.0034, 515.05, -64.0034, 515.05, 264.958, -200.128, 264.958 )
 script = ExtResource( 5 )
 
 [node name="Player" parent="ViewportContainer/Viewport" instance=ExtResource( 1 )]
