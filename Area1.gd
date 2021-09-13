@@ -21,8 +21,8 @@ func _ready():
 	if len(polygon) > 0:
 		topLeft = to_global(polygon[0])
 		buttomRight = to_global(polygon[2])
-		X_CELLS = abs(topLeft.x - buttomRight.x) / cellSize.x
-		Y_CELLS = abs(topLeft.y - buttomRight.y) / cellSize.y
+		X_CELLS = int(abs(topLeft.x - buttomRight.x) / cellSize.x)
+		Y_CELLS =int( abs(topLeft.y - buttomRight.y) / cellSize.y)
 	topLeftCell = tilemap.world_to_map(topLeft)
 	buttomRightCell = topLeftCell+Vector2(X_CELLS, Y_CELLS)
 	print(topLeftCell)
@@ -55,21 +55,35 @@ func updateCellUsedMap():
 			else:
 				cellUsedMap[cellCoord] = true
 	pass
-func getMoveDownCellList(coord:Vector2):
+class YCoordSorter:
+	static func sort_descending(a, b):
+		if a[1] > b[1]:
+			return true
+		return false
+	
+func getMoveDownCellList():
 	# search action only applies to empty cell
-	if tilemap.get_cellv(coord) >= 0:
-		return []
+	#if tilemap.get_cellv(coord) >= 0:
+	#	return []
 	var ret = []
 	var distance = 0
-	
-	var dest = coord
-	while coord.y >= topLeftCell.y:
-		if tilemap.get_cellv(coord) == -1:
-			distance += 1
-		else:
-			ret.append([coord, Vector2(coord.x, coord.y+distance)])
-		coord += Vector2(0, -1)
-		
+	var emptyList = getEmptyCellsInRect()
+	var track = []
+	for i in range(X_CELLS):
+		track.append(false)
+	emptyList.sort_custom(YCoordSorter, 'sort_descending')
+	for coord in emptyList:
+		if track[coord.x - topLeftCell.x]:
+			continue
+		var cur = coord
+		distance = 0
+		while cur.y >= topLeftCell.y:
+			if tilemap.get_cellv(cur) == -1:
+				distance += 1
+			else:
+				ret.append([cur, Vector2(cur.x, cur.y+distance)])
+			cur += Vector2(0, -1)
+		track[coord.x - topLeftCell.x] = true
 	return ret
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

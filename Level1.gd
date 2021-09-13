@@ -104,10 +104,10 @@ func fall(cell_coord:Vector2, duration):
 	print(emptyCells)
 	var moveDownList = []
 	
-	for coord in emptyCells:
-		if get_cellv(coord) > 3:
-			continue
-		moveDownList.append_array(area.getMoveDownCellList(coord))
+	#for coord in emptyCells:
+	#	if get_cellv(coord) > 3:
+	#		continue
+	moveDownList.append_array(area.getMoveDownCellList())
 	print("fall")
 	for coordPair in moveDownList:
 		var coord =coordPair[0]
@@ -121,6 +121,7 @@ func fall(cell_coord:Vector2, duration):
 		cellsPresent.erase(coord)
 		set_cellv(coord, -1)
 		set_cellv(newCoord, cell_inst.cell_type)
+		area.updateCellUsedMap()
 	if len(moveDownList) > 0:
 		emit_signal("eliminate_again", cell_coord)
 		

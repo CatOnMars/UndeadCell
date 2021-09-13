@@ -45,6 +45,35 @@ shape = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport/RigidBody2D2"]
 texture = ExtResource( 3 )
 
+[node name="Cells" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
+centered_textures = true
+tile_data = PoolIntArray( 2, 3, 0, 5, 3, 0, 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 131077, 12, 0, 524247, 2, 0, 589783, 2, 0, 655317, 2, 0, 655318, 2, 0, 655320, 2, 0, 655321, 2, 0, 1245143, 3, 0, 1310677, 3, 0, 1310678, 3, 0, 1310680, 3, 0, 1310681, 3, 0, 2031575, 1, 0, 2097110, 1, 0, 2097112, 1, 0, 2359241, 1, 0, 2359242, 1, 0, 2359264, 1, 0, 2359265, 1, 0, 2424778, 1, 0, 2424800, 1, 0, 2555859, 1, 0, 2555860, 1, 0, 2555862, 1, 0, 2686936, 3, 0, 2752472, 2, 0, 2818008, 2, 0, 2818009, 3, 0, 2883544, 1, 0, 2883545, 1, 0, 2883546, 3, 0, 2949078, 1, 0, 2949079, 1, 0, 2949080, 2, 0, 2949081, 2, 0, 2949082, 3, 0 )
+
+[node name="Area1" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
+visible = false
+position = Vector2( -2688, 1920 )
+polygon = PoolVector2Array( 0, 0, 192, 0, 192, 128, 0, 128 )
+script = ExtResource( 5 )
+
+[node name="Area2" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
+visible = false
+position = Vector2( -2752, 1152 )
+polygon = PoolVector2Array( 0, 0, 320, 0, 320, 128, 0, 128 )
+script = ExtResource( 5 )
+
+[node name="Area3" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
+visible = false
+position = Vector2( -2752, 448 )
+polygon = PoolVector2Array( 0, 0, 320, 0, 320, 192, 0, 192 )
+script = ExtResource( 5 )
+
+[node name="Area4" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
+visible = false
+position = Vector2( -2683, 2622.26 )
+scale = Vector2( 0.984371, 0.97276 )
+polygon = PoolVector2Array( -5, -64, 328.127, -64, 328.127, 273.185, -5.08057, 273.185 )
+script = ExtResource( 5 )
+
 [node name="Level" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
 centered_textures = true
 collision_use_kinematic = true
@@ -83,31 +112,3 @@ text = "Press Shift to switch order."
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Cells" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
-centered_textures = true
-tile_data = PoolIntArray( 2, 3, 0, 5, 3, 0, 65536, 2, 0, 65537, 2, 0, 196607, 1, 0, 131072, 1, 0, 131077, 12, 0, 524247, 2, 0, 589783, 2, 0, 655317, 2, 0, 655318, 2, 0, 655320, 2, 0, 655321, 2, 0, 1245143, 3, 0, 1310677, 3, 0, 1310678, 3, 0, 1310680, 3, 0, 1310681, 3, 0, 2031575, 1, 0, 2097110, 1, 0, 2097112, 1, 0, 2359241, 1, 0, 2359242, 1, 0, 2359264, 1, 0, 2359265, 1, 0, 2424778, 1, 0, 2424800, 1, 0, 2555859, 1, 0, 2555860, 1, 0, 2555862, 1, 0, 2686936, 3, 0, 2752472, 2, 0, 2818008, 2, 0, 2818009, 3, 0, 2883544, 1, 0, 2883545, 1, 0, 2883546, 3, 0, 2949078, 1, 0, 2949079, 1, 0, 2949080, 2, 0, 2949081, 2, 0, 2949082, 3, 0 )
-
-[node name="Area1" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
-visible = false
-position = Vector2( -2688, 1920 )
-polygon = PoolVector2Array( 0, 0, 192, 0, 192, 128, 0, 128 )
-script = ExtResource( 5 )
-
-[node name="Area2" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
-visible = false
-position = Vector2( -2752, 1152 )
-polygon = PoolVector2Array( 0, 0, 320, 0, 320, 128, 0, 128 )
-script = ExtResource( 5 )
-
-[node name="Area3" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
-visible = false
-position = Vector2( -2752, 448 )
-polygon = PoolVector2Array( 0, 0, 320, 0, 320, 192, 0, 192 )
-script = ExtResource( 5 )
-
-[node name="Area4" type="Polygon2D" parent="ViewportContainer/Viewport/Cells"]
-visible = false
-position = Vector2( -2688, 2624 )
-polygon = PoolVector2Array( -5.08057, -68.7488, 331.299, -74.0881, 331.299, 264.961, -5.08057, 264.961 )
-script = ExtResource( 5 )
