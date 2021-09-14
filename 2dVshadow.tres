@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://2dVShadow.shader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/light_pos = null
+shader_param/range_limit = 2000.0
+shader_param/hw = 0.025
+shader_param/hh = 0.0444444
