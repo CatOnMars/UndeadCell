@@ -16,6 +16,7 @@ enum CELL_TYPE {
 }
 
 var velocity = 300.0
+var curVelocity = 0.0;
 var movingDir = Vector2(0,-1)
 var cellsBullets = [ preload("res://cellUndeadBullet.tscn"),preload("res://cellRedBullet.tscn"),preload("res://cellGreenBullet.tscn"),preload("res://cellBlueBullet.tscn")]
 var cells = [ preload("res://cellUndead.tscn"),preload("res://cellRed.tscn"),preload("res://cellGreen.tscn"),preload("res://cellBlue.tscn")]
@@ -40,18 +41,18 @@ var turningNo = []
 func moveCell(i,cell,delta):
 	var turnPntIdx = turningNo[i] - 1
 	if turningNo[i] > 0 :
-		if cell.position.distance_to(turningPnts[turnPntIdx])>velocity*delta:
+		if cell.position.distance_to(turningPnts[turnPntIdx])>curVelocity*delta:
 			var followDir:Vector2 = (turningPnts[turnPntIdx]-cellNodes[i].position).normalized()
-			cell.position += velocity* delta *followDir
+			cell.position += curVelocity* delta *followDir
 		else:
-			var total_moving_amt = velocity * delta
+			var total_moving_amt = curVelocity * delta
 			var amt1 = cell.position.distance_to(turningPnts[turnPntIdx])
 			var dir1 = (turningPnts[turnPntIdx]-cell.position).normalized()
 			var dir2 = (cellNodes[i-1].position-cell.position).normalized()
 		#	cell.position = turningPnts[turnPntIdx]
 			#if (total_moving_amt > amt1):
 			#	cell.position += (total_moving_amt-amt1)*dir2
-			cell.position += velocity* delta *dir2
+			cell.position += curVelocity* delta *dir2
 			
 			turningNo[i] -= 1
 			if i == (cellNodes.size() -1):
@@ -59,7 +60,7 @@ func moveCell(i,cell,delta):
 	else:
 		var followDest:Vector2 = cellNodes[i-1].position-movingDir*cellNodes[i-1].get_node("Sprite").texture.get_width()
 		var followDir:Vector2 = (followDest-cellNodes[i].position).normalized()
-		cell.position += velocity* delta * followDir
+		cell.position += curVelocity* delta * followDir
 		
 
 var bulletVelocity=2000.0
@@ -108,6 +109,7 @@ func addTurningNo():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var head = 1
 func _physics_process(delta):
+	curVelocity = 0
 	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right") or Input.is_action_just_pressed("move_down") or Input.is_action_just_pressed("move_up"):
 		
 		if turningPnts.size()>0:
@@ -123,14 +125,18 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed("move_left"):
 		movingDir = Vector2(-1,0)
+		curVelocity = velocity
 	elif Input.is_action_pressed("move_right"):
 		movingDir = Vector2(1, 0)
+		curVelocity = velocity
 	elif Input.is_action_pressed("move_up"):
 		movingDir = Vector2(0,-1)
+		curVelocity = velocity
 	elif Input.is_action_pressed("move_down"):
 		movingDir = Vector2(0, 1)
+		curVelocity = velocity
 	
-	var collision = cellNodes[0].move_and_collide(velocity* delta * movingDir)
+	var collision = cellNodes[0].move_and_collide(curVelocity * delta * movingDir)
 	if not collision:
 		for idx in range(1,cellNodes.size()):
 			moveCell(idx,cellNodes[idx],delta)	
