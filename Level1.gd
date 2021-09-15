@@ -36,7 +36,7 @@ func add_new_cell(cellCoord, type):
 	cellsPresent[cellCoord] = cell_inst
 
 func fadeOut(coord, duration):
-	print("fadeOut",coord)
+#	print("fadeOut",coord)
 	var mat=cellsPresent[coord].get_node("Sprite").get_material()
 	mat.set_shader_param("r",0.4)
 	var alpha=duration
@@ -80,18 +80,41 @@ func eliminate(cell_coord:Vector2):
 			fadeOut(coord,0.3)
 	#fall()
 	if len(eList) > 0:
-		fall(cell_coord, 0.6)
+		fall(cell_coord, 0.3)
 	
 
+func animateCellMoving(coordPair, duration, area):
+	var coord = coordPair[0]
+	var newCoord =coordPair[1]
+	var cell_inst = cellsPresent[coord]
+	var initialPos =  map_to_world(coord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
+	var targetPos = map_to_world(newCoord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
+	var remainingDuration = duration
+	while remainingDuration>0:
+		var t = 1.0 - (remainingDuration/duration)
+		cell_inst.position = initialPos + t*(targetPos-initialPos)
+		remainingDuration-=get_process_delta_time()
+		yield(get_tree(),"idle_frame")
+	
+		
+	cell_inst.position = map_to_world(newCoord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
+	print("fall2")
+	cellsPresent[newCoord]  = cell_inst
+	cellsPresent.erase(coord)
+	set_cellv(coord, -1)
+	set_cellv(newCoord, cell_inst.cell_type)
+	area.updateCellUsedMap()
+	pass
+	
 class YCoordSorter:
 	static func sort_descending(a, b):
 		if a[1] > b[1]:
 			return true
 		return false
+		
 func fall(cell_coord:Vector2, duration):
-	while duration>0:
-		yield(get_tree(),"idle_frame")
-		duration-=get_process_delta_time()
+
+	yield(get_tree().create_timer(duration),"timeout")
 	
 	#var cell_coords = get_used_cells()
 	var area = getAreaOfCell(cell_coord)
@@ -109,20 +132,16 @@ func fall(cell_coord:Vector2, duration):
 	#		continue
 	moveDownList.append_array(area.getMoveDownCellList())
 	print("fall")
+	print(moveDownList)
 	for coordPair in moveDownList:
 		var coord =coordPair[0]
 		var newCoord =coordPair[1]
 		#var cellType = get_cellv(coord)
-		var cell_inst = cellsPresent[coord] 
-		
-		cell_inst.position = map_to_world(newCoord) + cell_inst.get_node("Sprite").texture.get_size()/2.0
-		print("fall2")
-		cellsPresent[newCoord]  = cell_inst
-		cellsPresent.erase(coord)
-		set_cellv(coord, -1)
-		set_cellv(newCoord, cell_inst.cell_type)
-		area.updateCellUsedMap()
+		animateCellMoving(coordPair , 0.1 , area)
+	
+	#TODO: This pattern doesn't always work, need to alter the implementation	
 	if len(moveDownList) > 0:
+		yield( get_tree().create_timer(0.15), "timeout" )
 		emit_signal("eliminate_again", cell_coord)
 		
 func dfs(origin):
