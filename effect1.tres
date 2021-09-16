@@ -1,11 +1,22 @@
 [gd_resource type="Environment" format=2]
 
 [resource]
+resource_local_to_scene = true
 background_mode = 4
 background_color = Color( 0.976471, 0.752941, 0.752941, 1 )
-glow_intensity = 1.67
-glow_strength = 0.54
-glow_bloom = 0.81
+glow_enabled = true
+glow_levels/1 = true
+glow_levels/2 = true
+glow_levels/4 = true
+glow_intensity = 2.04
+glow_strength = 0.48
+glow_bloom = 1.0
 glow_blend_mode = 0
-glow_hdr_threshold = 0.83
+glow_hdr_threshold = 0.92
+glow_hdr_luminance_cap = 14.94
+glow_hdr_scale = 1.93
 glow_bicubic_upscale = true
+adjustment_enabled = true
+adjustment_brightness = 0.82
+adjustment_contrast = 1.09
+adjustment_saturation = 2.47

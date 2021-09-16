@@ -144,10 +144,17 @@ func _physics_process(delta):
 	if Input.is_action_just_released("shoot") and cellNodes.size()>1:
 		shootNodes.append(cellNodes[1])
 		shootDir.append(movingDir)
-		for idx in range(2,cellNodes.size()):
-			cellNodes[idx].position=cellNodes[idx-1].position
+		var rng = RandomNumberGenerator.new()
+		rng.randomize()
+		var node = cellsBullets[rng.randi_range(1,3)].instance()
+		node.position = cellNodes[cellNodes.size()-1].position
+		for idx in range(cellNodes.size()-2):
+			cellNodes[cellNodes.size()-1-idx].position=cellNodes[cellNodes.size()-idx-2].position
 		cellNodes[1].position = cellNodes[0].position+velocity*delta*movingDir
 		cellNodes.remove(1)
+		cellNodes.append(node)
+		print(cellNodes, turningNo)
+		add_child(node)
 		head=1
 		
 	var i=0		
